@@ -20,7 +20,7 @@ export function getStylelintConfig({ moduleType, framework, useTypeScript }) {
     return {
       fileName: stylelintFileName,
       // stylelint 还不支持 ts 文件：https://stylelint.io/user-guide/configure
-      fileContent: stringifyTemplate('stylelint', 'stylelintVue.js'),
+      fileContent: stringifyTemplate('stylelint', 'vue-js.config.js'),
     }
   } else if (framework === 'react') {
     // TODO 先不做 React 的配置

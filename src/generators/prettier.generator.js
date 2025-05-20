@@ -21,7 +21,7 @@ function getPrettierConfig({ moduleType, framework, useTypeScript }) {
     // https://prettier.io/docs/configuration#typescript-configuration-files
     return {
       fileName: prettierFileName,
-      fileContent: stringifyTemplate('prettier', 'prettierJs.js'),
+      fileContent: stringifyTemplate('prettier', 'js.config.js'),
     }
   } else if (framework === 'react') {
     // TODO 先不做 React 的配置

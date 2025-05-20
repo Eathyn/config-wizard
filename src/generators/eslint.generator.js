@@ -20,12 +20,12 @@ function getEslintConfig({ moduleType, framework, useTypeScript }) {
     if (useTypeScript) {
       return {
         fileName: eslintFileName,
-        fileContent: stringifyTemplate('eslint', 'eslintVueTs.js'),
+        fileContent: stringifyTemplate('eslint', 'vue-ts.config.js'),
       }
     } else {
       return {
         fileName: eslintFileName,
-        fileContent: stringifyTemplate('eslint', 'eslintVueJs.js'),
+        fileContent: stringifyTemplate('eslint', 'vue-js.config.js'),
       }
     }
   } else if (framework === 'react') {

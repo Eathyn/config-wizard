@@ -20,12 +20,12 @@ function getCommitlintConfig({ moduleType, framework, useTypeScript }) {
     if (useTypeScript) {
       return {
         fileName: commitlintFileName,
-        fileContent: stringifyTemplate('commitlint', 'commitlintTs.ts'),
+        fileContent: stringifyTemplate('commitlint', 'ts.config.ts'),
       }
     } else {
       return {
         fileName: commitlintFileName,
-        fileContent: stringifyTemplate('commitlint', 'commitlintJs.js'),
+        fileContent: stringifyTemplate('commitlint', 'js.config.js'),
       }
     }
   } else if (framework === 'react') {
