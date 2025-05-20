@@ -1,8 +1,11 @@
-export default {
+import type { UserConfig } from '@commitlint/types'
+import { RuleConfigSeverity } from '@commitlint/types'
+
+const CommitlintConfig: UserConfig = {
   extends: ['@commitlint/config-conventional'],
   rules: {
     'subject-case': [
-      2,
+      RuleConfigSeverity.Error,
       'always',
       [
         'lower-case', // lower case
@@ -13,7 +16,9 @@ export default {
         'sentence-case', // Sentence case
         'snake-case', // snake_case
         'start-case', // Start Case
-      ],
-    ],
-  },
+      ]
+    ]
+  }
 }
+
+export default CommitlintConfig
