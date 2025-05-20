@@ -14,7 +14,9 @@ function generateConfigFileName({ moduleType, useTypeScript, toolName }) {
         case 'eslint':
           return 'eslint.config.ts'
         case 'prettier':
-          return 'prettier.config.ts'
+          // Prettier 目前需要使用实验性的 node 标志才能将配置文件改为 ts 格式，等这个标志稳定后再改
+          // https://prettier.io/docs/configuration#typescript-configuration-files
+          return 'prettier.config.js'
         case 'stylelint':
           // stylelint 还不支持 ts 文件：https://stylelint.io/user-guide/configure
           return 'stylelint.config.js'
