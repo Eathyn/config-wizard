@@ -1,6 +1,6 @@
 import { join } from 'path'
 import { writeFileSync } from 'fs'
-import { stringifyTemplate, generateConfigFileName } from '../utils/file.js'
+import { stringifyTemplate, generateConfigFileName } from '../utils/file.cjs'
 import handleError from '../utils/error.js'
 
 export default function generateEslintConfig(answers) {

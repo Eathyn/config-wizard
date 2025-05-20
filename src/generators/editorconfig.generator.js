@@ -1,6 +1,6 @@
 import { join } from 'path'
 import { writeFileSync } from 'fs'
-import { stringifyTemplate } from '../utils/file.js'
+import { stringifyTemplate } from '../utils/file.cjs'
 import handleError from '../utils/error.js'
 
 export default function generateEditorConfig() {
