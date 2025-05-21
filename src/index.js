@@ -8,6 +8,7 @@ import generatePrettierConfig from './generators/prettier.generator.js'
 import generateStylelintConfig from './generators/stylelint.generator.js'
 import generateCommitlintConfig from './generators/commitlint.generator.js'
 import { generateGitHooks } from './utils/husky.js'
+import validateAnswers from './cli/validate.js'
 
 const program = new Command()
 
@@ -17,6 +18,12 @@ program
   .description('config wizard')
   .action(async () => {
     const answers = await promptUser()
+    const { isValid, errors } = validateAnswers(answers)
+    if (!isValid) {
+      console.error('你的输入存在错误：')
+      console.error(errors.join('\n'))
+      process.exit(1)
+    }
     if (!answers.needCodeLint && !answers.needCommitLint) {
       console.log('你选择了无需代码规范和提交规范，因此程序结束')
       process.exit(0)
