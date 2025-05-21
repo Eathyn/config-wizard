@@ -1,4 +1,5 @@
 import { confirm, select } from '@inquirer/prompts'
+import handleError from '../utils/error.js'
 
 export async function promptUser() {
   try {
@@ -70,6 +71,6 @@ export async function promptUser() {
       packageManager,
     }
   } catch (err) {
-
+    handleError('处理用户输入时发生错误', err)
   }
 }
