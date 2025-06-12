@@ -1,9 +1,9 @@
 import { join } from 'path'
 import { writeFileSync } from 'fs'
-import { stringifyTemplate, generateConfigFileName } from '../utils/file.cjs'
-import handleError from '../utils/error.js'
+import { stringifyTemplate, generateConfigFileName } from '../utils/file.ts'
+import handleError from '../utils/error.ts'
 
-export default function generatePrettierConfig(answers) {
+export default function generatePrettierConfig(answers: Answers) {
   try {
     const { fileName, fileContent } = getPrettierConfig(answers)
     const configPath = join(process.cwd(), fileName)
@@ -14,8 +14,9 @@ export default function generatePrettierConfig(answers) {
   }
 }
 
-function getPrettierConfig({ moduleType, framework, useTypeScript }) {
-  const prettierFileName = generateConfigFileName({ moduleType, useTypeScript, toolName: 'prettier' })
+function getPrettierConfig(answers: Answers) {
+  const { moduleType, framework, useTypeScript } = answers
+  const prettierFileName = generateConfigFileName(moduleType, useTypeScript, 'prettier')
   if (framework === 'vue') {
     // Prettier 目前需要使用实验性的 node 标志才能将配置文件改为 ts 格式，等这个标志稳定后再改
     // https://prettier.io/docs/configuration#typescript-configuration-files
@@ -23,9 +24,11 @@ function getPrettierConfig({ moduleType, framework, useTypeScript }) {
       fileName: prettierFileName,
       fileContent: stringifyTemplate('prettier', 'js.config.js'),
     }
-  } else if (framework === 'react') {
-    // TODO 先不做 React 的配置
   } else {
-    throw new Error(`不支持该框架`)
+    // TODO 先不做 React 的配置
+    return {
+      fileName: prettierFileName,
+      fileContent: stringifyTemplate('prettier', 'js.config.js'),
+    }
   }
 }

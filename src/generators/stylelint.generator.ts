@@ -1,9 +1,9 @@
 import { join } from 'path'
 import { writeFileSync } from 'fs'
-import { stringifyTemplate, generateConfigFileName } from '../utils/file.cjs'
-import handleError from '../utils/error.js'
+import { stringifyTemplate, generateConfigFileName } from '../utils/file.ts'
+import handleError from '../utils/error.ts'
 
-export default function generateStylelintConfig(answers) {
+export default function generateStylelintConfig(answers: Answers) {
   try {
     const { fileName, fileContent } = getStylelintConfig(answers)
     const configPath = join(process.cwd(), fileName)
@@ -14,17 +14,20 @@ export default function generateStylelintConfig(answers) {
   }
 }
 
-export function getStylelintConfig({ moduleType, framework, useTypeScript }) {
-  const stylelintFileName = generateConfigFileName({moduleType, useTypeScript, toolName: 'stylelint'})
+export function getStylelintConfig(answers: Answers) {
+  const { moduleType, framework, useTypeScript } = answers
+  const stylelintFileName = generateConfigFileName(moduleType, useTypeScript, 'stylelint')
   if (framework === 'vue') {
     return {
       fileName: stylelintFileName,
       // stylelint 还不支持 ts 文件：https://stylelint.io/user-guide/configure
       fileContent: stringifyTemplate('stylelint', 'vue-js.config.js'),
     }
-  } else if (framework === 'react') {
-    // TODO 先不做 React 的配置
   } else {
-    throw new Error(`不支持该框架`)
+    // TODO 先不做 React 的配置
+    return {
+      fileName: stylelintFileName,
+      fileContent: stringifyTemplate('stylelint', 'react-js.config.js'),
+    }
   }
 }

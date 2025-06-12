@@ -1,13 +1,12 @@
-const path = require('path')
-const fs = require('fs')
-const appRoot = require('app-root-path')
+import path from 'path'
+import fs from 'fs'
 
-function stringifyTemplate(dir, fileName) {
-  const templatePath = path.join(appRoot.path, 'src', 'templates', dir, fileName)
+export function stringifyTemplate(dir: string, fileName: string) {
+  const templatePath = path.join('..', 'templates', dir, fileName)
   return fs.readFileSync(templatePath, { encoding: 'utf-8' })
 }
 
-function generateConfigFileName({ moduleType, useTypeScript, toolName }) {
+export function generateConfigFileName(moduleType: ModuleType, useTypeScript: boolean, toolName: ToolName ) {
   if (moduleType === 'esm') {
     if (useTypeScript) {
       switch (toolName) {
@@ -69,9 +68,4 @@ function generateConfigFileName({ moduleType, useTypeScript, toolName }) {
       }
     }
   }
-}
-
-module.exports = {
-  stringifyTemplate,
-  generateConfigFileName,
 }

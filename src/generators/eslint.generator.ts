@@ -1,9 +1,9 @@
 import { join } from 'path'
 import { writeFileSync } from 'fs'
-import { stringifyTemplate, generateConfigFileName } from '../utils/file.cjs'
-import handleError from '../utils/error.js'
+import { stringifyTemplate, generateConfigFileName } from '../utils/file.ts'
+import handleError from '../utils/error.ts'
 
-export default function generateEslintConfig(answers) {
+export default function generateEslintConfig(answers: Answers) {
   try {
     const { fileName, fileContent } = getEslintConfig(answers)
     const configPath = join(process.cwd(), fileName)
@@ -14,8 +14,9 @@ export default function generateEslintConfig(answers) {
   }
 }
 
-function getEslintConfig({ moduleType, framework, useTypeScript }) {
-  const eslintFileName = generateConfigFileName({ moduleType, useTypeScript, toolName: 'eslint' })
+function getEslintConfig(answers: Answers) {
+  const { moduleType, framework, useTypeScript } = answers
+  const eslintFileName = generateConfigFileName(moduleType, useTypeScript, 'eslint')
   if (framework === 'vue') {
     if (useTypeScript) {
       return {
@@ -28,9 +29,18 @@ function getEslintConfig({ moduleType, framework, useTypeScript }) {
         fileContent: stringifyTemplate('eslint', 'vue-js.config.js'),
       }
     }
-  } else if (framework === 'react') {
-    // TODO 先不做 React 的配置
   } else {
-    throw new Error(`不支持该框架`)
+    // TODO 先不做 React 的配置
+    if (useTypeScript) {
+      return {
+        fileName: eslintFileName,
+        fileContent: stringifyTemplate('eslint', 'react-ts.config.js'),
+      }
+    } else {
+      return {
+        fileName: eslintFileName,
+        fileContent: stringifyTemplate('eslint', 'react-js.config.js'),
+      }
+    }
   }
 }

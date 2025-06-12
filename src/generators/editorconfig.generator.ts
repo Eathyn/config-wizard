@@ -1,7 +1,7 @@
 import { join } from 'path'
 import { writeFileSync } from 'fs'
-import { stringifyTemplate } from '../utils/file.cjs'
-import handleError from '../utils/error.js'
+import { stringifyTemplate } from '../utils/file.ts'
+import handleError from '../utils/error.ts'
 
 export default function generateEditorConfig() {
   try {

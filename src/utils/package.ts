@@ -1,11 +1,14 @@
 import { execSync } from 'child_process'
 import { join } from 'path'
 import { readFileSync, writeFileSync } from 'fs'
-import handleError from './error.js'
+import handleError from './error.ts'
 
-export async function getDependencies(answers) {
-  const devDependencies = []
-  const devDependenciesExactVersion = []
+type Dependencies = string[]
+type PackageJson = Record<string, any>
+
+export function getDependencies(answers: Answers) {
+  const devDependencies: Dependencies = []
+  const devDependenciesExactVersion: Dependencies = []
   addCodeLintDependencies(answers, devDependencies, devDependenciesExactVersion)
   addCommitLintDependencies(answers, devDependencies)
   logDependencies(devDependencies, devDependenciesExactVersion)
@@ -15,7 +18,7 @@ export async function getDependencies(answers) {
   }
 }
 
-function addCodeLintDependencies(answers, devDependencies, devDependenciesExactVersion) {
+function addCodeLintDependencies(answers: Answers, devDependencies: Dependencies, devDependenciesExactVersion: Dependencies) {
   const { needCodeLint, framework, useTypeScript } = answers
   if (!needCodeLint) return
   devDependencies.push(
@@ -45,7 +48,7 @@ function addCodeLintDependencies(answers, devDependencies, devDependenciesExactV
   }
 }
 
-function addCommitLintDependencies(answers, devDependencies) {
+function addCommitLintDependencies(answers: Answers, devDependencies: Dependencies) {
   const { needCommitLint, needCodeLint } = answers
   if (needCommitLint) {
     devDependencies.push(
@@ -62,7 +65,7 @@ function addCommitLintDependencies(answers, devDependencies) {
   }
 }
 
-function logDependencies(devDependencies, devDependenciesExactVersion) {
+function logDependencies(devDependencies: Dependencies, devDependenciesExactVersion: Dependencies) {
   console.log('\n将安装以下开发依赖（devDependencies）')
   for (let dep of [...devDependencies, ...devDependenciesExactVersion]) {
     console.log(`${dep}`)
@@ -70,7 +73,7 @@ function logDependencies(devDependencies, devDependenciesExactVersion) {
   console.log('\n')
 }
 
-export async function installDependencies(packageManager, devDependencies, devDependenciesExactVersion) {
+export async function installDependencies(packageManager: PackageManager, devDependencies: Dependencies, devDependenciesExactVersion: Dependencies) {
   try {
     const installDevDependenciesCmd = {
       npm: `npm install --save-dev ${devDependencies.join(' ')}`,
@@ -91,7 +94,7 @@ export async function installDependencies(packageManager, devDependencies, devDe
   }
 }
 
-export function updatePackageJson(answers) {
+export function updatePackageJson(answers: Answers) {
   const packageJsonPath = join(process.cwd(), 'package.json')
   const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf8'))
   updateScript(answers, packageJson)
@@ -100,7 +103,8 @@ export function updatePackageJson(answers) {
   writePackageJson(packageJsonPath, packageJson)
 }
 
-function updateScript({ needCodeLint, needCommitLint }, packageJson) {
+function updateScript(answers: Answers, packageJson: PackageJson) {
+  const { needCodeLint, needCommitLint } = answers
   if (needCodeLint) {
     packageJson.scripts = {
       ...packageJson.scripts,
@@ -119,7 +123,8 @@ function updateScript({ needCodeLint, needCommitLint }, packageJson) {
   }
 }
 
-function updateConfig({ needCodeLint, needCommitLint }, packageJson) {
+function updateConfig(answers: Answers, packageJson: PackageJson) {
+  const { needCommitLint } = answers
   if (needCommitLint) {
     packageJson.config = {
       ...packageJson.config,
@@ -130,7 +135,8 @@ function updateConfig({ needCodeLint, needCommitLint }, packageJson) {
   }
 }
 
-function updateLintStaged({ needCodeLint, needCommitLint }, packageJson) {
+function updateLintStaged(answers: Answers, packageJson: PackageJson) {
+  const { needCodeLint } = answers
   if (needCodeLint) {
     packageJson['lint-staged'] = {
       '*.{vue,ts,js}': [
@@ -146,7 +152,7 @@ function updateLintStaged({ needCodeLint, needCommitLint }, packageJson) {
   }
 }
 
-function writePackageJson(packageJsonPath, packageJson) {
+function writePackageJson(packageJsonPath: string, packageJson: PackageJson) {
   try {
     writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2) + '\n')
     console.log('package.json 更新成功')

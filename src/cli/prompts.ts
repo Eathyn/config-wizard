@@ -1,13 +1,13 @@
 import { confirm, select } from '@inquirer/prompts'
-import handleError from '../utils/error.js'
+import handleError from '../utils/error.ts'
 
 export async function promptUser() {
   try {
-    const needCodeLint = await confirm({
+    const needCodeLint: boolean = await confirm({
       message: '是否需要代码规范？',
       default: true,
     })
-    const needCommitLint = await confirm({
+    const needCommitLint: boolean = await confirm({
       message: '是否需要提交规范？',
       default: true,
     })
@@ -15,7 +15,7 @@ export async function promptUser() {
       console.log('所有选项都选择了否，结束执行。')
       process.exit(0)
     }
-    const moduleType = await select({
+    const moduleType: ModuleType = await select({
       message: '使用哪种模块规范？',
       choices: [
         {
@@ -28,11 +28,11 @@ export async function promptUser() {
         },
       ],
     })
-    const useTypeScript = await confirm({
+    const useTypeScript: boolean = await confirm({
       message: '是否使用 TypeScript？',
       default: true,
     })
-    const framework = await select({
+    const framework: Framework = await select({
       message: '使用哪个框架？',
       choices: [
         {
@@ -45,7 +45,7 @@ export async function promptUser() {
         },
       ],
     })
-    const packageManager = await select({
+    const packageManager: PackageManager = await select({
       message: '使用哪个包管理器？',
       choices: [
         {
@@ -62,7 +62,7 @@ export async function promptUser() {
         },
       ]
     })
-    return {
+    const answers: Answers = {
       needCodeLint,
       needCommitLint,
       moduleType,
@@ -70,6 +70,7 @@ export async function promptUser() {
       framework,
       packageManager,
     }
+    return answers
   } catch (err) {
     handleError('处理用户输入时发生错误', err)
   }

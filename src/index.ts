@@ -1,14 +1,14 @@
 import { Command } from 'commander'
 import { confirm } from '@inquirer/prompts'
-import { promptUser } from './cli/prompts.js'
-import { getDependencies, installDependencies, updatePackageJson } from './utils/package.js'
-import generateEditorConfig from './generators/editorconfig.generator.js'
-import generateEslintConfig from './generators/eslint.generator.js'
-import generatePrettierConfig from './generators/prettier.generator.js'
-import generateStylelintConfig from './generators/stylelint.generator.js'
-import generateCommitlintConfig from './generators/commitlint.generator.js'
-import { generateGitHooks } from './utils/husky.js'
-import validateAnswers from './cli/validate.js'
+import { promptUser } from './cli/prompts'
+import { getDependencies, installDependencies, updatePackageJson } from './utils/package'
+import generateEditorConfig from './generators/editorconfig.generator'
+import generateEslintConfig from './generators/eslint.generator'
+import generatePrettierConfig from './generators/prettier.generator'
+import generateStylelintConfig from './generators/stylelint.generator'
+import generateCommitlintConfig from './generators/commitlint.generator'
+import { generateGitHooks } from './utils/husky'
+import validateAnswers from './cli/validate'
 
 const program = new Command()
 
@@ -18,6 +18,9 @@ program
   .description('config wizard')
   .action(async () => {
     const answers = await promptUser()
+    if (typeof answers === 'undefined') {
+      return
+    }
     const { isValid, errors } = validateAnswers(answers)
     if (!isValid) {
       console.error('你的输入存在错误：')
@@ -28,7 +31,7 @@ program
       console.log('你选择了无需代码规范和提交规范，因此程序结束')
       process.exit(0)
     }
-    const { devDependencies, devDependenciesExactVersion } = await getDependencies(answers)
+    const { devDependencies, devDependenciesExactVersion } = getDependencies(answers)
     const isInstallDependencies = await confirm({
       message: '是否立刻安装这些依赖',
       default: true,

@@ -1,15 +1,16 @@
 import { execSync } from 'child_process'
 import { join } from 'path'
 import { writeFileSync } from 'fs'
-import handleError from './error.js'
+import handleError from './error.ts'
 
-export function generateGitHooks({ packageManager, needCodeLint, needCommitLint }) {
+export function generateGitHooks(answers: Answers) {
+  const { packageManager, needCodeLint, needCommitLint } = answers
   initHusky(packageManager)
   createPreCommitHook(needCodeLint)
   createCommitMessageHook(needCommitLint)
 }
 
-function initHusky(packageManager) {
+function initHusky(packageManager: PackageManager) {
   try {
     const huskyPrepareCmd = {
       npm: 'npm run prepare',
@@ -23,7 +24,7 @@ function initHusky(packageManager) {
   }
 }
 
-function createPreCommitHook(needCodeLint) {
+function createPreCommitHook(needCodeLint: boolean) {
   if (needCodeLint) {
     const preCommitPath = join(process.cwd(), '.husky', 'pre-commit')
     const preCommitContent = `#!/usr/bin/env bash\npnpm run lint\n`
@@ -36,7 +37,7 @@ function createPreCommitHook(needCodeLint) {
   }
 }
 
-function createCommitMessageHook(needCommitLint) {
+function createCommitMessageHook(needCommitLint: boolean) {
   if (needCommitLint) {
     const commitMsgPath = join(process.cwd(), '.husky', 'commit-msg')
     const commitMsgContent = `#!/usr/bin/env bash\npnpm commitlint --edit "$1"\n`
