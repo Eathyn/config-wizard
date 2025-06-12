@@ -2,7 +2,7 @@ import path from 'path'
 import fs from 'fs'
 
 export function stringifyTemplate(dir: string, fileName: string) {
-  const templatePath = path.join('..', 'templates', dir, fileName)
+  const templatePath = path.join(path.dirname(new URL(import.meta.url).pathname), '..', 'templates', dir, fileName)
   return fs.readFileSync(templatePath, { encoding: 'utf-8' })
 }
 
