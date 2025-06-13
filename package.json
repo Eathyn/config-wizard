@@ -8,7 +8,7 @@
     "start-config": "bin/cli.js"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsup",
     "check-exports": "attw --pack ."
   },
   "keywords": [],
