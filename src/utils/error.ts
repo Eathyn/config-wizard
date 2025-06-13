@@ -3,7 +3,7 @@ export default function handleError(message: string, error: unknown) {
     if (message) {
       console.error(`\n${message}: `)
     }
-    console.error(error.message)
+    console.error(error)
   } else {
     const err = new Error(`${JSON.stringify(error)}`)
     if (message) {
