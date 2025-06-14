@@ -1,9 +1,9 @@
-import path from 'path'
-import fs from 'fs'
+import { join } from 'path'
+import { readFileSync } from 'fs'
 
 export function stringifyTemplate(dir: string, fileName: string) {
-  const templatePath = path.join(path.dirname(new URL(import.meta.url).pathname), '..', 'templates', dir, fileName)
-  return fs.readFileSync(templatePath, { encoding: 'utf-8' })
+  const templatePath = join(process.cwd(), 'node_modules', 'config-wizard', 'dist', 'templates', dir, fileName)
+  return readFileSync(templatePath, { encoding: 'utf-8' })
 }
 
 export function generateConfigFileName(moduleType: ModuleType, useTypeScript: boolean, toolName: ToolName ) {
